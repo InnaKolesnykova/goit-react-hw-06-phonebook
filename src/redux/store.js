@@ -12,12 +12,13 @@ import {
   PURGE,
   REGISTER,
 } from 'redux-persist';
-import storage from 'redux-persist/lib/storage';
+import storage from 'redux-persist/lib/storage'; // localStorage
 
+// Конфігурація для збереження в localStorage
 const persistConfig = {
-  key: 'contacts',
+  key: 'root', // ключ для збереження
   storage,
-  whitelist: ['contacts'], // зберігаємо тільки контакти
+  whitelist: ['contacts'], // зберігаємо тільки масив контактів
 };
 
 const rootReducer = combineReducers({
@@ -38,4 +39,3 @@ export const store = configureStore({
 });
 
 export const persistor = persistStore(store);
-
