@@ -1,9 +1,10 @@
+
 import React from 'react';
 import { useSelector, useDispatch } from 'react-redux';
-import { deleteContact } from '../redux/contactsSlice';
+import { removeContact } from '../../redux/store';
 
 export const ContactList = () => {
-  const { items, filter } = useSelector(state => state.contacts);
+  const { items, filter } = useSelector(state => state);
   const dispatch = useDispatch();
 
   const filteredContacts = items.filter(contact =>
@@ -14,8 +15,8 @@ export const ContactList = () => {
     <ul>
       {filteredContacts.map(contact => (
         <li key={contact.id}>
-          {contact.name}: {contact.phone}
-          <button onClick={() => dispatch(deleteContact(contact.id))}>Delete</button>
+          {contact.name}: {contact.phone}{' '}
+          <button onClick={() => dispatch(removeContact(contact.id))}>Delete</button>
         </li>
       ))}
     </ul>

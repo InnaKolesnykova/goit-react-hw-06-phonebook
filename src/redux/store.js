@@ -1,41 +1,40 @@
-import { configureStore, combineReducers } from '@reduxjs/toolkit';
-import { contactsReducer } from './contactsSlice';
-import { filterReducer } from './filterSlice';
+// src/redux/store.js
+import { configureStore, createSlice } from '@reduxjs/toolkit';
+import { persistStore, persistReducer } from 'redux-persist';
+import storage from 'redux-persist/lib/storage';
 
-import {
-  persistStore,
-  persistReducer,
-  FLUSH,
-  REHYDRATE,
-  PAUSE,
-  PERSIST,
-  PURGE,
-  REGISTER,
-} from 'redux-persist';
-import storage from 'redux-persist/lib/storage'; // localStorage
-
-// Конфігурація для збереження в localStorage
-const persistConfig = {
-  key: 'root', // ключ для збереження
-  storage,
-  whitelist: ['contacts'], // зберігаємо тільки масив контактів
-};
-
-const rootReducer = combineReducers({
-  contacts: contactsReducer,
-  filter: filterReducer,
+// Slice для контактів
+const contactsSlice = createSlice({
+  name: 'contacts',
+  initialState: {
+    items: [],
+    filter: '',
+  },
+  reducers: {
+    addContact: (state, action) => {
+      state.items.push(action.payload);
+    },
+    removeContact: (state, action) => {
+      state.items = state.items.filter(contact => contact.id !== action.payload);
+    },
+    setFilter: (state, action) => {
+      state.filter = action.payload;
+    },
+  },
 });
 
-const persistedReducer = persistReducer(persistConfig, rootReducer);
+export const { addContact, removeContact, setFilter } = contactsSlice.actions;
+
+// Persist конфігурація
+const persistConfig = {
+  key: 'contacts',
+  storage,
+};
+
+const persistedReducer = persistReducer(persistConfig, contactsSlice.reducer);
 
 export const store = configureStore({
   reducer: persistedReducer,
-  middleware: getDefaultMiddleware =>
-    getDefaultMiddleware({
-      serializableCheck: {
-        ignoredActions: [FLUSH, REHYDRATE, PAUSE, PERSIST, PURGE, REGISTER],
-      },
-    }),
 });
 
 export const persistor = persistStore(store);
