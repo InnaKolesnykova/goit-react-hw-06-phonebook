@@ -1,19 +1,21 @@
 import React from 'react';
 import { useDispatch } from 'react-redux';
-import { deleteContact } from '../../redux/contactSlice';
+import { deleteContact } from '../../redux/contactsSlice';
+import css from './ContactElem.module.css';
 
-const ContactElem = ({ contact }) => {
+export const ContactElem = ({ contact }) => {
   const dispatch = useDispatch();
 
   const handleDelete = () => {
     dispatch(deleteContact(contact.id));
   };
-  return (
-    <li key={contact.id}>
-      {contact.name}: {contact.number}{' '}
-      <button onClick={handleDelete}>Delete</button>
-    </li>
-  )
-};
 
-export { ContactElem };
+  return (
+    <li className={css.contactItem}>
+      {contact.name}: {contact.number}
+      <button className={css.deleteBtn} onClick={handleDelete}>
+        Delete
+      </button>
+    </li>
+  );
+};
