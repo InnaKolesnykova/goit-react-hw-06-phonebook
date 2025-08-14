@@ -1,69 +1,36 @@
 import React, { useState } from 'react';
-import css from './Form.module.css';
 import { useDispatch, useSelector } from 'react-redux';
-import { addContact } from '../../redux/contactsSlice';
+import { addContact } from '../redux/contactsSlice';
 
-const Form = () => {
-  const dispatch = useDispatch();
-  const contacts = useSelector(state => state.contacts);
-
+export const Form = () => {
   const [name, setName] = useState('');
-  const [number, setNumber] = useState('');
+  const [phone, setPhone] = useState('');
+  const contacts = useSelector(state => state.contacts.items);
+  const dispatch = useDispatch();
 
-  const handleSubmit = event => {
-    event.preventDefault();
-
-    const trimmedName = name.trim();
-    const trimmedNumber = number.trim();
-
-    if (!trimmedName || !trimmedNumber) {
-      return;
-    }
-
-    if (contacts.find(contact => contact.number === trimmedNumber)) {
-      alert(`Number ${trimmedNumber} is already in contacts!`);
-      return;
-    }
-
-    if (contacts.find(contact => contact.name.toLowerCase() === trimmedName.toLowerCase())) {
-      alert(`Name ${trimmedName} is already in contacts!`);
-      return;
-    }
-
-    // Виклик згідно prepare(name, number)
-    dispatch(addContact(trimmedName, trimmedNumber));
-
+  const handleSubmit = e => {
+    e.preventDefault();
+    if (!name || !phone) return;
+    dispatch(addContact({ name, phone }));
     setName('');
-    setNumber('');
+    setPhone('');
   };
 
   return (
-    <form className={css.formBox} onSubmit={handleSubmit}>
-      <label>
-        Name
-        <input
-          type="text"
-          name="name"
-          value={name}
-          onChange={e => setName(e.target.value)}
-          required
-        />
-      </label>
-      <label>
-        Phone number
-        <input
-          type="tel"
-          name="number"
-          value={number}
-          onChange={e => setNumber(e.target.value)}
-          required
-        />
-      </label>
-      <button className={css.btn} type="submit">
-        Add Contact
-      </button>
+    <form onSubmit={handleSubmit}>
+      <input
+        type="text"
+        placeholder="Name"
+        value={name}
+        onChange={e => setName(e.target.value)}
+      />
+      <input
+        type="text"
+        placeholder="Phone"
+        value={phone}
+        onChange={e => setPhone(e.target.value)}
+      />
+      <button type="submit">Add</button>
     </form>
   );
 };
-
-export { Form };
