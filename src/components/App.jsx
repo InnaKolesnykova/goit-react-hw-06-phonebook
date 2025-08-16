@@ -1,19 +1,17 @@
-// src/components/App.jsx
-import React from 'react';
-import { Form } from './Form/Form';
-import { Search } from './Search/Search';
-import { ContactList } from './ContactList/ContactList';
+import { ContactForm } from './components/ContactForm';
+import { ContactList } from './components/ContactList';
+import { Filter } from './components/Filter';
 
-const App = () => {
+function App() {
   return (
-    <div style={{ padding: '20px', fontFamily: 'Arial, sans-serif' }}>
-      <h1>Phonebook</h1>
-      <Form />
-      <h2>Contacts</h2>
-      <Search />
+    <div>
+      <h1>Книга контактів</h1>
+      <ContactForm />
+      <h2>Контакти</h2>
+      <Filter />
       <ContactList />
     </div>
   );
-};
+}
 
 export default App;

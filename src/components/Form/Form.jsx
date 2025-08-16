@@ -1,42 +1,36 @@
-// src/components/Form/Form.jsx
 import React, { useState } from 'react';
-import { useDispatch, useSelector } from 'react-redux';
-import { addContact } from '../../redux/store';
-import { nanoid } from 'nanoid';
+import { useDispatch } from 'react-redux';
+import { addContact } from '../redux/contactsSlice';
 
-export const Form = () => {
+export const ContactForm = () => {
+  const dispatch = useDispatch();
   const [name, setName] = useState('');
   const [phone, setPhone] = useState('');
-  const contacts = useSelector(state => state.items);
-  const dispatch = useDispatch();
 
   const handleSubmit = e => {
     e.preventDefault();
-    if (!name || !phone) return alert('Enter name and phone');
-    if (contacts.some(c => c.name === name)) return alert('Contact already exists');
-
-    dispatch(addContact({ id: nanoid(), name, phone }));
+    dispatch(addContact({ name, phone }));
     setName('');
     setPhone('');
   };
 
   return (
-    <form onSubmit={handleSubmit} style={{ marginBottom: '20px' }}>
+    <form onSubmit={handleSubmit}>
       <input
         type="text"
-        placeholder="Name"
         value={name}
         onChange={e => setName(e.target.value)}
-        style={{ marginRight: '10px' }}
+        placeholder="Ім’я"
+        required
       />
       <input
-        type="text"
-        placeholder="Phone"
+        type="tel"
         value={phone}
         onChange={e => setPhone(e.target.value)}
-        style={{ marginRight: '10px' }}
+        placeholder="Телефон"
+        required
       />
-      <button type="submit">Add</button>
+      <button type="submit">Додати</button>
     </form>
   );
 };
